@@ -80,7 +80,7 @@ sudo iptables -A FORWARD -i "$2" -o "$1" -j ACCEPT' > share
 
 cp share /usr/bin/share
 chmod +x /usr/bin/share
-if false
+if true
 then
 #################################################
 ONETIME=cat /etc/router.conf 2>/dev/null
