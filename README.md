@@ -8,7 +8,8 @@ Yo lo he probado con una antena Yagi grande de exteriores, pasando el cable a de
 El resultado: tienes tu propia wifi gratis. 
 
 
-Ejecutar como administrador asi:
+Ejecutar como administrador así:
+
 ......$ sudo su
 
 ......# ./rpi3installer
