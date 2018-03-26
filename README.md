@@ -10,4 +10,5 @@ El resultado: tienes tu propia wifi gratis.
 
 Ejecutar como administrador asi:
 ......$ sudo su
-......# ./rpi3router
+
+......# ./rpi3installer
