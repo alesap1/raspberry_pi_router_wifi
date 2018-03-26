@@ -80,8 +80,7 @@ sudo iptables -A FORWARD -i "$2" -o "$1" -j ACCEPT' > share
 
 cp share /usr/bin/share
 chmod +x /usr/bin/share
-if true
-then
+
 #################################################
 ONETIME=cat /etc/router.conf 2>/dev/null
 if [ -n $ONETIME ]
@@ -106,7 +105,7 @@ ifdown -a -vv
 ifup -a -vv 
 echo "Reiniciando dnsmasq..."
 /etc/init.d/dnsmasq restart
-fi
+
 echo " ";
 echo "FINALIZADO"
 exit 0
