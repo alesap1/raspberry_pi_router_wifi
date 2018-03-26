@@ -6,3 +6,8 @@ Para ello hay que deshabilitar el dhcp en el router y poner puerta de enlace la 
 Si le pillas el wifi al vecino o al bar de abajo puedes tener internet gratis en casa.
 Yo lo he probado con una antena Yagi grande de exteriores, pasando el cable a dentro de la casa, conectado a una tarjeta alpha de potencia buena a la antena y la tarjeta a la raspberry por usb. El puerto ethernet conectado a un router wifi. 
 El resultado: tienes tu propia wifi gratis. 
+
+
+Ejecutar como administrador asi:
+......$ sudo su
+......# ./rpi3router
