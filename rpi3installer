@@ -1,0 +1,117 @@
+#!/bin/bash
+clear
+echo "Instalando Paquetes necesarios ...";
+echo " ";
+apt-get install dnsmasq  -y
+apt-get install iptables -y
+#apt-get install wpasupplicant -y
+echo " ";
+
+#Selecionando interfaz wifi
+echo "Tarjetas wifi disponibles"
+#iwconfig  2>/dev/null |grep IEEE |awk '{print $1}'
+iwconfig  2>/dev/null |grep IEEE |awk '{ print "\033[1m"$1"\033[0m"}'
+echo " ";
+echo "Introduzca el nobre de la tarjeta que se conectara a internet (ej: wlan0) :";
+echo " ";
+read WIFICARD
+echo "Tarjeta selecionada : $WIFICARD";
+echo " ";
+
+#Selecionando interfaz ethernet
+echo "Tarjetas ethernet disponibles"
+#iwconfig  2>&1 >/dev/null | grep "no wireless extensions" |awk '{print $1}'
+#iwconfig  2>&1 | grep "no wireless extensions" |awk '{print $1}'
+iwconfig  2>&1 | grep "no wireless extensions"|awk '{ print "\033[1m"$1"\033[0m"}'
+echo " ";
+echo "Introduzca el nobre de la tarjeta  ethernet que ofrecerá internet (ej: eth0) :";
+echo " ";
+read ETHCARD
+echo "Tarjeta selecionada : $ETHCARD";
+echo " ";
+
+#Selecionando red wifi 
+echo "Redes WIFI detectadas: "
+iwlist $WIFICARD scan |grep ESSID 
+echo " ";
+echo "Introduzca el nobre de la red  (ej: WLAN_XXXX) :";
+echo " ";
+read WIFIESSID
+echo "Red selecionada : $WIFIESSID";
+echo " ";
+echo "Introduzca la contraseña de l red wifi :";
+echo " ";
+read WIFIPASS
+echo " ";
+ 
+
+
+####### Generando archivo interfaces ##########
+echo "Prearando interfaces..."
+rm interfaces 2>/dev/null
+echo "#source-directory /etc/network/interfaces.d
+auto lo
+iface lo inet loopback
+
+
+auto $ETHCARD
+iface $ETHCARD inet static
+      address 192.168.0.1
+      netmask 255.255.255.0
+      broadcast 192.168.0.255
+
+
+auto $WIFICARD
+iface $WIFICARD inet dhcp
+	pre-up sudo iwconfig $WIFICARD power on
+      	wpa-ssid $WIFIESSID
+       	wpa-psk $WIFIPASS
+	post-up sudo share $WIFICARD $ETHCARD
+
+" > interfaces
+
+####### Generando archivo share ##########
+echo "Prearando NAT..."
+rm share 2>/dev/null
+echo '#!/bin/bash
+sudo iptables -t nat -A POSTROUTING -o "$1" -j MASQUERADE
+sudo iptables -A FORWARD -i "$1" -o "$2" -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i "$2" -o "$1" -j ACCEPT' > share
+
+cp share /usr/bin/share
+chmod +x /usr/bin/share
+if false
+then
+#################################################
+ONETIME=cat /etc/router.conf 2>/dev/null
+if [ -n $ONETIME ]
+then
+
+	cp /etc/network/interfaces /etc/network/interfaces.bak
+	echo 1 > /proc/sys/net/ipv4/ip_forward
+	echo "Configurando net.ipv4.ip_forward=1 en /etc/sysctl.conf ..."
+	echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+
+	echo "Configurando servidor dhcp..."
+	echo "listen-address=192.168.0.1" >> /etc/dnsmasq.conf 
+	echo "bind-interfaces" >> /etc/dnsmasq.conf 
+	echo "dhcp-range=192.168.0.2,192.168.0.254,12h" >> /etc/dnsmasq.conf
+	echo 1 > /etc/router.conf
+fi
+
+echo "Configurando interfaces..."
+cp interfaces /etc/network/interfaces
+echo "Reiniciando tarjetas de red..."
+ifdown -a -vv
+ifup -a -vv 
+echo "Reiniciando dnsmasq..."
+/etc/init.d/dnsmasq restart
+fi
+echo " ";
+echo "FINALIZADO"
+exit 0
+
+
+
+
+
