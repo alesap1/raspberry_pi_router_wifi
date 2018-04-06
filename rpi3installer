@@ -85,6 +85,7 @@ chmod +x /usr/bin/share
 if [ -e /etc/router ]
 then
 #nada que hacer
+echo ""
 else
 
 	cp /etc/network/interfaces /etc/network/interfaces.bak
