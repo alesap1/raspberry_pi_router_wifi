@@ -82,8 +82,10 @@ cp share /usr/bin/share
 chmod +x /usr/bin/share
 
 #################################################
-ONETIME=cat /etc/router.conf 2>/dev/null
-if [ "1" != $ONETIME ]
+if [ -e /etc/router ]
+then
+#nada que hacer
+else
 then
 
 	cp /etc/network/interfaces /etc/network/interfaces.bak
@@ -98,7 +100,7 @@ then
 	echo "listen-address=192.168.0.1" >> /etc/dnsmasq.conf 
 	echo "bind-interfaces" >> /etc/dnsmasq.conf 
 	echo "dhcp-range=192.168.0.2,192.168.0.254,12h" >> /etc/dnsmasq.conf
-	echo 1 > /etc/router.conf
+	echo 1 > /etc/router
 fi
 
 echo "Configurando interfaces..."
