@@ -2,8 +2,8 @@
 clear
 echo "Instalando Paquetes necesarios ...";
 echo " ";
-apt-get install dnsmasq  -y
-apt-get install iptables -y
+apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null &
+apt-get install iptables -y > /dev/null 2> /dev/null < /dev/null &
 #apt-get install wpasupplicant -y
 echo " ";
 
@@ -83,15 +83,17 @@ chmod +x /usr/bin/share
 
 #################################################
 ONETIME=cat /etc/router.conf 2>/dev/null
-if [ -n $ONETIME ]
+if [ 1 = $ONETIME ]
 then
 
 	cp /etc/network/interfaces /etc/network/interfaces.bak
 	echo 1 > /proc/sys/net/ipv4/ip_forward
 	echo "Configurando net.ipv4.ip_forward=1 en /etc/sysctl.conf ..."
+	echo " " >> /etc/sysctl.conf
 	echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 
 	echo "Configurando servidor dhcp..."
+	echo " " >> /etc/dnsmasq.conf 
 	echo "listen-address=192.168.0.1" >> /etc/dnsmasq.conf 
 	echo "bind-interfaces" >> /etc/dnsmasq.conf 
 	echo "dhcp-range=192.168.0.2,192.168.0.254,12h" >> /etc/dnsmasq.conf
