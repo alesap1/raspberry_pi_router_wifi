@@ -39,7 +39,7 @@ echo " ";
 read WIFIESSID
 echo "Red selecionada : $WIFIESSID";
 echo " ";
-echo "Introduzca la contraseña de l red wifi :";
+echo "Introduzca la contraseña de la red wifi :";
 echo " ";
 read WIFIPASS
 echo " ";
@@ -91,6 +91,7 @@ then
 	echo "Configurando net.ipv4.ip_forward=1 en /etc/sysctl.conf ..."
 	echo " " >> /etc/sysctl.conf
 	echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+	sysctl --system
 
 	echo "Configurando servidor dhcp..."
 	echo " " >> /etc/dnsmasq.conf 
