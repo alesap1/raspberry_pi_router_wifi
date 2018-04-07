@@ -5,8 +5,8 @@ let INSTALLED_ALL=0
 
 while (($INSTALLED_ALL!=2))
 do
-	INSTALLED=$(dpkg --get-selections |grep -w dnsmaq  | grep -w install)
-	if [ $INSTALLED = "" ]
+	INSTALLED=$(dpkg --get-selections |grep -w dnsmasq  | grep -w install)
+	if [ "$INSTALLED" = "" ]
 	then	
 		let dnsmasq_INSTALLED=0
 		echo "instalando dnsmasq..."
@@ -19,7 +19,7 @@ do
 	fi
 	
 	INSTALLED=$(dpkg --get-selections |grep -w iptables  | grep -w install)
-	if [ $INSTALLED = "" ]
+	if [ "$INSTALLED" = "" ]
 	then	
 		let iptables_INSTALLED=0
 		echo "instalando iptables..."
@@ -30,10 +30,10 @@ do
 		let iptables_INSTALLED=1
 	fi
 	let INSTALLED_ALL=$iptables_INSTALLED+$dnsmasq_INSTALLED
+	#echo $INSTALLED_ALL
 done
 
 echo " ";
-
 
 #Selecionando interfaz wifi
 echo "Tarjetas wifi disponibles"
