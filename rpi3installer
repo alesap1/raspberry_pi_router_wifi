@@ -1,39 +1,39 @@
 #!/bin/bash
 clear
 echo "Comprobando dependencias..."
-let INSTALLED_CNT=0
+let INSTALLED_ALL=0
 
-while (($INSTALLED_CNT<2))
+while (($INSTALLED_ALL!=2))
 do
 	INSTALLED=$(dpkg --get-selections |grep -w dnsmaq  | grep -w install)
 	if ["$INSTALLED"=""]
 	then	
+		let dnsmasq_INSTALLED=0
 		echo "instalando dnsmasq..."
 		apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null 
 
 	else
 		echo "dnsmasq instalado OK"
-		let INSTALLED_CNT=$INSTALLED_CNT+1
+		let dnsmasq_INSTALLED=1
 
 	fi
 	
 	INSTALLED=$(dpkg --get-selections |grep -w iptables  | grep -w install)
 	if ["$INSTALLED" =""]
 	then	
+		let iptables_INSTALLED=0
 		echo "instalando iptables..."
 		apt-get install iptables  -y > /dev/null 2> /dev/null < /dev/null 
 
 	else
-		echo "dnsmasq instalado OK"
-		let INSTALLED_CNT=$INSTALLED_CNT+1
+		echo "iptables instalado OK"
+		let iptables_INSTALLED=1
 	fi
+	let INSTALLED_ALL=$iptables_INSTALLED+$dnsmasq_INSTALLED
 done
-echo "Instalando Paquetes necesarios ...";
+
 echo " ";
-apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null 
-apt-get install iptables -y > /dev/null 2> /dev/null < /dev/null 
-#apt-get install wpasupplicant -y
-echo " ";
+
 
 #Selecionando interfaz wifi
 echo "Tarjetas wifi disponibles"
