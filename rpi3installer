@@ -6,7 +6,7 @@ let INSTALLED_ALL=0
 while (($INSTALLED_ALL!=2))
 do
 	INSTALLED=$(dpkg --get-selections |grep -w dnsmaq  | grep -w install)
-	if ["$INSTALLED"=""]
+	if [ $INSTALLED = "" ]
 	then	
 		let dnsmasq_INSTALLED=0
 		echo "instalando dnsmasq..."
@@ -19,7 +19,7 @@ do
 	fi
 	
 	INSTALLED=$(dpkg --get-selections |grep -w iptables  | grep -w install)
-	if ["$INSTALLED" =""]
+	if [ $INSTALLED = "" ]
 	then	
 		let iptables_INSTALLED=0
 		echo "instalando iptables..."
