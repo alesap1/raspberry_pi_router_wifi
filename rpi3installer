@@ -1,5 +1,33 @@
 #!/bin/bash
 clear
+echo "Comprobando dependencias..."
+let INSTALLED_CNT=0
+
+while (($INSTALLED_CNT<2))
+do
+	INSTALLED=$(dpkg --get-selections |grep -w dnsmaq  | grep -w install)
+	if ["$INSTALLED"=""]
+	then	
+		echo "instalando dnsmasq..."
+		apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null 
+
+	else
+		echo "dnsmasq instalado OK"
+		let INSTALLED_CNT=$INSTALLED_CNT+1
+
+	fi
+	
+	INSTALLED=$(dpkg --get-selections |grep -w iptables  | grep -w install)
+	if ["$INSTALLED" =""]
+	then	
+		echo "instalando iptables..."
+		apt-get install iptables  -y > /dev/null 2> /dev/null < /dev/null 
+
+	else
+		echo "dnsmasq instalado OK"
+		let INSTALLED_CNT=$INSTALLED_CNT+1
+	fi
+done
 echo "Instalando Paquetes necesarios ...";
 echo " ";
 apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null 
