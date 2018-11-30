@@ -1,37 +1,7 @@
 #!/bin/bash
 clear
-echo "Comprobando dependencias..."
-let INSTALLED_ALL=0
-
-while (($INSTALLED_ALL!=2))
-do
-	INSTALLED=$(dpkg --get-selections |grep -w dnsmasq  | grep -w install)
-	if [ "$INSTALLED" = "" ]
-	then	
-		let dnsmasq_INSTALLED=0
-		echo "instalando dnsmasq..."
-		apt-get install dnsmasq  -y > /dev/null 2> /dev/null < /dev/null 
-
-	else
-		echo "dnsmasq instalado OK"
-		let dnsmasq_INSTALLED=1
-
-	fi
-	
-	INSTALLED=$(dpkg --get-selections |grep -w iptables  | grep -w install)
-	if [ "$INSTALLED" = "" ]
-	then	
-		let iptables_INSTALLED=0
-		echo "instalando iptables..."
-		apt-get install iptables  -y > /dev/null 2> /dev/null < /dev/null 
-
-	else
-		echo "iptables instalado OK"
-		let iptables_INSTALLED=1
-	fi
-	let INSTALLED_ALL=$iptables_INSTALLED+$dnsmasq_INSTALLED
-	#echo $INSTALLED_ALL
-done
+echo "Instalando dependencias..."
+apt-get install dnsmasq iptables  -y 
 
 echo " ";
 
